@@ -1,15 +1,10 @@
-#include "src/CONTROLLER.h"
-#ifndef ATTITUDE_h
-#include "src/utility/Attitude.h"
-#endif
+#include "src/Bdot.h"
+
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
-
-
-#define do_sweep false
-#define cmd_angle (Attitude(0, Vector<3>{0, 0, 45}, Vector<3>{0, 0, 0}))
+#include "src/FastPID.h"
 #define sampling_rate 40 // millis
 
 #define BNO055_SAMPLERATE_DELAY_MS (100)
@@ -21,13 +16,12 @@ typedef enum
 
 } motor_ch_t;
 
-CONTROLLER ctrlor(sampling_rate);
-
-//driver motor1(m1_enPin, m1_dirPin, m1_speedP);
+BDOT bdot_controller(sampling_rate);
 
 float Kp = 10, Ki = 0, Kd = 0, Hz = 1 / sampling_rate;
 int output_bits = 11;
 bool output_signed = true;
+
 FastPID myPID(Kp, Ki, Kd, Hz, output_bits, output_signed);
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28);
@@ -53,14 +47,6 @@ void setup()
 
   update_sensors();
 
-  if (do_sweep && !ctrlor.get_isset())
-  {
-    ctrlor.setsweeping(cmd_angle);
-  }
-  else if (!ctrlor.get_isset())
-  {
-    ctrlor.setpointing(cmd_angle);
-  }
 }
 Vector<3> getPIDcmd(Vector<3> error)
 {
@@ -73,31 +59,31 @@ Vector<3> getPIDcmd(Vector<3> error)
   return rt;
 }
 
+void loop()
+{
 
-void loop() {
-  
   if (!timeloop())
     return;
   update_sensors();
-  // error_vec = ctrlor.runpointing();
+  Vector<3> error_vec = bdot_controller.runbdot();
 
-  //    cmd = getPIDcmd(error_vec);
-  //    Serial.print(",Motor 1:");
-  //    motor_CMD_update(MOTOR_CH1,cmd[0]);
-  //    Serial.print(",Motor 2:");
-  //    motor_CMD_update(MOTOR_CH2,cmd[1]);
-  //    Serial.print(",Motor 3:");
-  //    motor_CMD_update(MOTOR_CH3,cmd[2]);
-  // Serial.println("");
-
+  Vector<3> cmd = getPIDcmd(error_vec);
+  Serial.print(",Motor 1:");
+  Serial.print(error_vec[0]);
+  Serial.print(",Motor 2:");
+  Serial.print(error_vec[1]);
+  Serial.print(",Motor 3:");
+  Serial.print(error_vec[2]);
+  Serial.println("");
 }
 
 void update_sensors()
 {
-  Quaternion q_update = bno.getQuat();
+  // Quaternion q_update = bno.getQuat();
   Vector<3> rates = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
+  Vector<3> mag = bno.getVector(Adafruit_BNO055::VECTOR_MAGNETOMETER);
 
-  ctrlor.update_att(1, q_update, rates);
+  bdot_controller.update(0, rates, mag);
 }
 
 bool timeloop()
@@ -105,7 +91,7 @@ bool timeloop()
   static uint16_t last_time = 0;
   uint16_t now_time = millis();
   uint16_t dif_time = now_time - last_time;
-  if (dif_time <= ctrlor.get_sample_rate())
+  if (dif_time <= bdot_controller.get_sample_rate())
     return 0; // not in loop
   last_time = now_time;
   return 1;
