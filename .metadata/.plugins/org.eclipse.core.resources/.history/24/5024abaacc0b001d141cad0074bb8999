@@ -1,0 +1,43 @@
+#include "stm32f4xx_hal.h"
+#include "stdio.h"
+
+class NEWUART
+{
+public:
+    NEWUART(USART_TypeDef *uartport, const uint32_t Timeout, uint32_t BuadRate = 115200) : _Timeout(Timeout), _baudrate(BuadRate)
+    {
+        _uart->Instance = uartport;
+        _uart->Init.BaudRate = BuadRate;
+        _uart->Init.WordLength = UART_WORDLENGTH_8B;
+        _uart->Init.StopBits = UART_STOPBITS_1;
+        _uart->Init.Parity = UART_PARITY_NONE;
+        _uart->Init.Mode = UART_MODE_TX_RX;
+        _uart->Init.HwFlowCtl = UART_HWCONTROL_NONE;
+        _uart->Init.OverSampling = UART_OVERSAMPLING_16;
+    }
+    UART_HandleTypeDef* getHandleTypeDef() { return _uart; }
+    void begin(const uint32_t BuadRate)
+    {
+        _uart->Init.BaudRate = BuadRate;
+        if (HAL_UART_Init(_uart->Instance) != HAL_OK)
+        {
+            // Error_Handler();
+        }
+    }
+    void writeByte(const uint8_t data)
+    {
+        HAL_UART_Transmit(this->_uart, data, sizeof(data), _Timeout);
+    }
+
+    uint8_t readByte()
+    {
+        uint8_t data;
+        HAL_UART_Transmit(this->_uart, &data, 1, _Timeout);
+        return data;
+    }
+
+private:
+    UART_HandleTypeDef *_uart;
+    uint32_t _baudrate;
+    uint32_t _Timeout;
+}
