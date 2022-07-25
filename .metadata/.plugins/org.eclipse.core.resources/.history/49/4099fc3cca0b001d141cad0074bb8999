@@ -18,10 +18,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "stdio.h"
+#include "stm32newfnc/i2cscan.h"
+#include "stm32newfnc/newuart.cpp"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#define BAUDRATE 115200
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -35,11 +37,11 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+NEWUART Serial3(USART3,10);
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
- I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 I2C_HandleTypeDef hi2c3;
 
@@ -50,7 +52,7 @@ TIM_HandleTypeDef htim1;
 UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart5;
 UART_HandleTypeDef huart7;
-UART_HandleTypeDef huart3;
+//UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 
@@ -66,7 +68,7 @@ static void MX_TIM1_Init(void);
 static void MX_UART4_Init(void);
 static void MX_UART5_Init(void);
 static void MX_UART7_Init(void);
-static void MX_USART3_UART_Init(void);
+//static void MX_USART3_UART_Init(void);
 static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -112,10 +114,11 @@ int main(void)
   MX_UART4_Init();
   MX_UART5_Init();
   MX_UART7_Init();
-  MX_USART3_UART_Init();
+  //MX_USART3_UART_Init();
+  Serial3.begin(115200);
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-
+  //i2cscanner(&hi2c1,&huart3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -123,7 +126,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+    Serial3.wirteByte('A');
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -447,7 +450,7 @@ static void MX_UART5_Init(void)
 
   /* USER CODE END UART5_Init 1 */
   huart5.Instance = UART5;
-  huart5.Init.BaudRate = 115200;
+  huart5.Init.BaudRate = BAUDRATE;
   huart5.Init.WordLength = UART_WORDLENGTH_8B;
   huart5.Init.StopBits = UART_STOPBITS_1;
   huart5.Init.Parity = UART_PARITY_NONE;

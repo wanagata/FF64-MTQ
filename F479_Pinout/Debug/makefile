@@ -76,7 +76,7 @@ main-build: F479_Pinout.elf secondary-outputs
 
 # Tool invocations
 F479_Pinout.elf F479_Pinout.map: $(OBJS) $(USER_OBJS) C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "F479_Pinout.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld" -Wl,-Map="F479_Pinout.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+	arm-none-eabi-g++ -o "F479_Pinout.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld" -Wl,-Map="F479_Pinout.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
