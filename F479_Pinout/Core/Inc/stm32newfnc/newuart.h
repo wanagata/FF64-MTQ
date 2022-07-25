@@ -75,4 +75,9 @@ public:
     	sprintf(buf,"%.4f",data);
     	this->print(buf);
     }
+    void println(const char text[])
+    {
+        print(text);
+        print("\n");
+    }
 };

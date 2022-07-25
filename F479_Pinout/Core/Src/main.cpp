@@ -21,6 +21,7 @@
 #include "stdio.h"
 //#include "stm32newfnc/i2cscan.h"
 #include "stm32newfnc/newuart.h"
+#include "driver/mpu6050.h"
 #include "pcf8574.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -114,7 +115,9 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
   //i2cscanner(&hi2c1,&huart3);
-  
+  if(!MPU6050_Init(&hi2c2)){
+    Serial3.println("Error");
+  }
   while (1)
   {
 
