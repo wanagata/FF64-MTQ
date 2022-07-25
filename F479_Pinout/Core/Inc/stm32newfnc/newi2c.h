@@ -1,6 +1,7 @@
 #include "stm32f4xx_hal.h"
-#include "stdio.h"
-#include "string.h"
+#ifndef __NEWI2C_H
+#define __NEWI2C_H
+
 class NEWI2C
 {
 private:
@@ -35,16 +36,17 @@ public:
     }
     void writeBytes(const uint8_t addr, uint8_t data[], uint8_t len)
     {
-        HAL_I2C_Master_Transmit(&_i2c, addr, &data, sizeof(data), _Timeout);
+        HAL_I2C_Master_Transmit(&_i2c, addr, data, len, _Timeout);
     }
 
     uint8_t readByte(const uint8_t addr,uint8_t *buffer)
     {
-        return HAL_I2C_Master_Receive(&_i2c, addr, &buffer, 1, _Timeout);
+        return HAL_I2C_Master_Receive(&_i2c, addr, buffer, 1, _Timeout);
     }
 
-    uint8_t* readMEMs(const uint8_t addr,const uint8_t reg,uint8_t *buffer,const uint8_t len){
-        HAL_I2C_Mem_Read(&_i2c,addr,reg,1,buffer,len,_Timeout);
+    void readMEMs(const uint8_t addr,const uint8_t reg,uint8_t *buffer,const uint8_t len){
+         HAL_I2C_Mem_Read(&_i2c,addr,reg,1,buffer,len,_Timeout);
     }
 
 };
+#endif

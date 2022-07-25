@@ -12,7 +12,6 @@
  * SDA and SCL options aren't implemented.
  */
 
-ี๊ื
 
 #define INA219_CALC_ADDRESS(INA_ADDR0, INA_ADDR1) \
     (0x40 | (INA_ADDR0 != 0 ? 0x01 : 0x00) | (INA_ADDR1 != 0 ? 0x04 : 0x00))

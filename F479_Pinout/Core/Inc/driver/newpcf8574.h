@@ -21,11 +21,14 @@ private:
     }
 
 public:
-    newpcf8574(NEWI2C *i2c_dev, int addr, uint8_t port_state = 0b00000000) : _i2c_dev(i2c_dev), _i2c_addr(addr), _pin_state(port_state)
+    newpcf8574(NEWI2C *i2c_dev, int addr, uint8_t port_state = 0b00000000)
     {
+    	_i2c_dev=i2c_dev;
+		 _i2c_addr=addr;
+		 _pin_state=port_state;
     }
 
-    void setPIN(uint8_t port_num, int port_state)
+    void setPIN(uint8_t port_num, uint8_t port_state)
     {
         //uint8_t number = int_pow(2, port_num);
         uint8_t num = 0b1<<port_num;
