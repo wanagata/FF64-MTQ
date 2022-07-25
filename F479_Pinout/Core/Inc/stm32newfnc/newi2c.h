@@ -1,6 +1,6 @@
 #include "stm32f4xx_hal.h"
-#ifndef __NEWI2C_H
-#define __NEWI2C_H
+#ifndef _NEWI2C_H
+#define _NEWI2C_H
 
 class NEWI2C
 {
