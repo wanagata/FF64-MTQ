@@ -33,41 +33,18 @@ public:
             //Error_Handler();
         }
     }
-    void writeByte(const uint8_t data)
+    void writeBytes(const uint8_t addr, uint8_t data[], uint8_t len)
     {
-        HAL_UART_Transmit(&_uart, &data, sizeof(data), _Timeout);
+        HAL_I2C_Master_Transmit(&_i2c, addr, &data, sizeof(data), _Timeout);
     }
 
-    uint8_t readByte(uint8_t *buffer)
+    uint8_t readByte(const uint8_t addr,uint8_t *buffer)
     {
-        return HAL_UART_Receive(&_uart, buffer, 1, _Timeout);
+        return HAL_I2C_Master_Receive(&_i2c, addr, &buffer, 1, _Timeout);
     }
 
-    void writeBytes(uint8_t data[], uint8_t len)
-    {
-        HAL_UART_Transmit(&_uart, data, len, _Timeout);
+    uint8_t* readMEMs(const uint8_t addr,const uint8_t reg,uint8_t *buffer,const uint8_t len){
+        HAL_I2C_Mem_Read(&_i2c,addr,reg,1,buffer,len,_Timeout);
     }
 
-    void print(const char text[])
-    {
-        uint8_t len = strlen(text);
-        uint8_t buf[len];
-        for (int i = 0; i < len; i++)
-        {
-            buf[i] = text[i];
-        }
-        this->writeBytes(buf, sizeof(buf));
-    }
-    void printI(int data)
-    {
-        char buf[11] = {0};
-        sprintf(buf, "%d", data);
-        this->print(buf);
-    }
-    void printF(float data)
-    {
-        char buf[11] = {0};
-        sprintf(buf, "%.4f", data);
-        this->print(buf);
-    }
 };
