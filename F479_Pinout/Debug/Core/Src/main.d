@@ -30,8 +30,10 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- ../Core/Inc/stm32newfnc/newuart.h ../Core/Inc/stm32newfnc/newi2c.h \
- ../Core/Inc/driver/newpcf8574.h
+ ../Core/Inc/stm32newfnc/i2cscan.h ../Core/Inc/stm32newfnc/newuart.h \
+ ../Core/Inc/stm32newfnc/newi2c.h ../Core/Inc/driver/newpcf8574.h \
+ ../Core/Inc/driver/mpu6050.h ../Core/Inc/driver/newINA219.h \
+ ../Core/Inc/utility/multconvert.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -64,6 +66,10 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
+../Core/Inc/stm32newfnc/i2cscan.h:
 ../Core/Inc/stm32newfnc/newuart.h:
 ../Core/Inc/stm32newfnc/newi2c.h:
 ../Core/Inc/driver/newpcf8574.h:
+../Core/Inc/driver/mpu6050.h:
+../Core/Inc/driver/newINA219.h:
+../Core/Inc/utility/multconvert.h:
