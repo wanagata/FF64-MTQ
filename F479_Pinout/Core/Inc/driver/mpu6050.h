@@ -106,7 +106,7 @@ double Kalman_getAngle(Kalman_t *Kalman, double newAngle, double newRate, double
 #define GYRO_XOUT_H_REG 0x43
 
 // Setup MPU6050
-#define MPU6050_ADDR 0xD0
+#define MPU6050_ADDR 0x69<<1
 const uint16_t i2c_timeout = 100;
 const double Accel_Z_corrector = 14418.0;
 
@@ -125,8 +125,8 @@ Kalman_t KalmanY = {
 
 uint8_t MPU6050_Init(I2C_HandleTypeDef *I2Cx)
 {
-    uint8_t check;
-    uint8_t Data;
+    uint8_t check=0;
+    uint8_t Data=0;
 
     // check device ID WHO_AM_I
 

@@ -4,7 +4,7 @@ void i2cscanner(I2C_HandleTypeDef *i2cbus, UART_HandleTypeDef *uart)
 {
     uint8_t i = 0, ret;
 
-    uint8_t Buffer[25] = {0};
+    char Buffer[25] = {0};
     uint8_t Space[] = " - ";
     uint8_t StartMSG[] = "Starting I2C Scanning: \r\n";
     uint8_t EndMSG[] = "Done! \r\n\r\n";
@@ -21,7 +21,7 @@ void i2cscanner(I2C_HandleTypeDef *i2cbus, UART_HandleTypeDef *uart)
         else if (ret == HAL_OK)
         {
             sprintf(Buffer, "0x%X", i);
-            HAL_UART_Transmit(uart, Buffer, sizeof(Buffer), 10000);
+            HAL_UART_Transmit(uart, (uint8_t*)Buffer, sizeof(Buffer), 10000);
         }
     }
     HAL_UART_Transmit(uart, EndMSG, sizeof(EndMSG), 10000);

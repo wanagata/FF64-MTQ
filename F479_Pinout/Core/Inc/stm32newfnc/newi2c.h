@@ -43,10 +43,15 @@ public:
     {
         return HAL_I2C_Master_Receive(&_i2c, addr, buffer, 1, _Timeout);
     }
-
+    uint8_t readBytes(const uint8_t addr,uint8_t *buffer,uint8_t len)
+        {
+            return HAL_I2C_Master_Receive(&_i2c, addr, buffer, len, _Timeout);
+        }
     void readMEMs(const uint8_t addr,const uint8_t reg,uint8_t *buffer,const uint8_t len){
          HAL_I2C_Mem_Read(&_i2c,addr,reg,1,buffer,len,_Timeout);
     }
-
+    void writeMEMs(const uint8_t addr,const uint8_t reg,uint8_t *buffer, const uint8_t len){
+        HAL_I2C_Mem_Write(&_i2c,addr,reg,1,buffer, len, _Timeout);
+    }
 };
 #endif

@@ -156,14 +156,18 @@ public:
         ina219_currentDivider_mA = 0;
         ina219_powerMultiplier_mW = 0.0f;
     }
-    bool begin()
+    uint16_t begin()
     {
-        setCalibration_32V_2A();
-        return true;
+        newCalibration();
+        UINT16UNION_t buffer;
+        _i2c_dev->readMEMs(ina219_i2caddr,INA219_REG_CONFIG,&buffer.bytes[0],2);
+        swapDataByte(&buffer.bytes[0]);
+        return buffer.number;
     }
+
     void setCalibration_32V_2A()
     {
-        ina219_calValue.number = 4096;
+        ina219_calValue.number = (uint16_t)4096;
         ina219_currentDivider_mA = 10; // Current LSB = 100uA per bit (1000/100 = 10)
         ina219_powerMultiplier_mW = 2; // Power LSB = 1mW per bit (2/1)
 
@@ -171,47 +175,31 @@ public:
         // Adafruit_BusIO_Register calibration_reg =
         //    Adafruit_BusIO_Register(i2c_dev, INA219_REG_CALIBRATION, 2, MSBFIRST);
         // Setcalibration_reg.write(ina219_calValue.number, 2);
-        _i2c_dev->writeBytes(INA219_REG_CALIBRATION, &ina219_calValue.bytes, 2);
+        _i2c_dev->writeMEMs(ina219_i2caddr,INA219_REG_CALIBRATION, &ina219_calValue.bytes[0], 2);
         // Set Config register to take into account the settings above
         UINT16UNION_t config;
         config.number = INA219_CONFIG_BVOLTAGERANGE_32V |
                         INA219_CONFIG_GAIN_8_320MV | INA219_CONFIG_BADCRES_12BIT |
                         INA219_CONFIG_SADCRES_12BIT_1S_532US |
                         INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
-
-        // Adafruit_BusIO_Register config_reg =
-        //     Adafruit_BusIO_Register(i2c_dev, INA219_REG_CONFIG, 2, MSBFIRST);
-        //_success = config_reg.write(config, 2);
-        _i2c_dev->writeBytes(INA219_REG_CONFIG, &config.bytes, 2);
+        swapDataByte(&config.bytes[0]);
+        _i2c_dev->writeMEMs(ina219_i2caddr,INA219_REG_CONFIG, &config.bytes[0], 2);
     }
+
     void setCalibration_32V_1A()
     {
         ina219_calValue.number = 10240;
         // Set multipliers to convert raw current/power values
         ina219_currentDivider_mA = 25;    // Current LSB = 40uA per bit (1000/40 = 25)
         ina219_powerMultiplier_mW = 0.8f; // Power LSB = 800uW per bit
-        /*
-        // Set Calibration register to 'Cal' calculated above
-        Adafruit_BusIO_Register calibration_reg =
-            Adafruit_BusIO_Register(i2c_dev, INA219_REG_CALIBRATION, 2, MSBFIRST);
-        calibration_reg.write(ina219_calValue.number, 2);
-
-        // Set Config register to take into account the settings above
-        uint16_t config = INA219_CONFIG_BVOLTAGERANGE_32V |
-                          INA219_CONFIG_GAIN_8_320MV | INA219_CONFIG_BADCRES_12BIT |
-                          INA219_CONFIG_SADCRES_12BIT_1S_532US |
-                          INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
-        Adafruit_BusIO_Register config_reg =
-            Adafruit_BusIO_Register(i2c_dev, INA219_REG_CONFIG, 2, MSBFIRST);
-        _success = config_reg.write(config, 2);
-        */
-        _i2c_dev->writeBytes(INA219_REG_CALIBRATION, &ina219_calValue.bytes, 2);
+        _i2c_dev->writeMEMs(ina219_i2caddr,INA219_REG_CALIBRATION, &ina219_calValue.bytes[0], 2);
         UINT16UNION_t config;
         config.number = INA219_CONFIG_BVOLTAGERANGE_32V |
                         INA219_CONFIG_GAIN_8_320MV | INA219_CONFIG_BADCRES_12BIT |
                         INA219_CONFIG_SADCRES_12BIT_1S_532US |
                         INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
-        _i2c_dev->writeBytes(INA219_REG_CONFIG, &config.bytes, 2);
+        swapDataByte(&config.bytes[0]);
+        _i2c_dev->writeMEMs(ina219_i2caddr,INA219_REG_CONFIG, &config.bytes[0], 2);
     }
     void setCalibration_16V_400mA()
     {
@@ -219,33 +207,34 @@ public:
         // Set multipliers to convert raw current/power values
         ina219_currentDivider_mA = 20;    // Current LSB = 50uA per bit (1000/50 = 20)
         ina219_powerMultiplier_mW = 1.0f; // Power LSB = 1mW per bit
-        /*
-        // Set Calibration register to 'Cal' calculated above
-        Adafruit_BusIO_Register calibration_reg =
-            Adafruit_BusIO_Register(i2c_dev, INA219_REG_CALIBRATION, 2, MSBFIRST);
-        calibration_reg.write(ina219_calValue.number, 2);
-        // Set Config register to take into account the settings above
-        uint16_t config = INA219_CONFIG_BVOLTAGERANGE_16V |
-                          INA219_CONFIG_GAIN_1_40MV | INA219_CONFIG_BADCRES_12BIT |
-                          INA219_CONFIG_SADCRES_12BIT_1S_532US |
-                          INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
-
-        Adafruit_BusIO_Register config_reg =
-            Adafruit_BusIO_Register(i2c_dev, INA219_REG_CONFIG, 2, MSBFIRST);
-        _success = config_reg.write(config, 2);
-        */
-        _i2c_dev->writeBytes(INA219_REG_CALIBRATION, &ina219_calValue.bytes, 2);
+        _i2c_dev->writeMEMs(ina219_i2caddr,INA219_REG_CALIBRATION, &ina219_calValue.bytes[0], 2);
         UINT16UNION_t config;
         config.number = INA219_CONFIG_BVOLTAGERANGE_16V |
                         INA219_CONFIG_GAIN_1_40MV | INA219_CONFIG_BADCRES_12BIT |
                         INA219_CONFIG_SADCRES_12BIT_1S_532US |
                         INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
-        _i2c_dev->writeBytes(INA219_REG_CONFIG, &config.bytes, 2);
+        swapDataByte(&config.bytes[0]);
+        _i2c_dev->writeMEMs(ina219_i2caddr,INA219_REG_CONFIG, &config.bytes[0], 2);
+    }
+    void newCalibration()
+    {
+        ina219_calValue.number = 8192;
+        // Set multipliers to convert raw current/power values
+        ina219_currentDivider_mA = 20;    // Current LSB = 50uA per bit (1000/50 = 20)
+        ina219_powerMultiplier_mW = 1.0f; // Power LSB = 1mW per bit
+        _i2c_dev->writeMEMs(ina219_i2caddr,INA219_REG_CALIBRATION, &ina219_calValue.bytes[0], 2);
+        UINT16UNION_t config;
+        config.number = INA219_CONFIG_BVOLTAGERANGE_16V |
+                        INA219_CONFIG_GAIN_2_80MV | INA219_CONFIG_BADCRES_12BIT |
+                        INA219_CONFIG_BADCRES_12BIT_128S_69MS |
+                        INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
+        swapDataByte(&config.bytes[0]);
+        _i2c_dev->writeMEMs(ina219_i2caddr,INA219_REG_CONFIG, &config.bytes[0], 2);
     }
     float getBusVoltage_V() { return ((int16_t)getBusVoltage_raw()) * 0.001; }
     float getShuntVoltage_mV() { return ((int16_t)getShuntVoltage_raw()) * 0.01; }
-    float getCurrent_mA() { return (getCurrent_raw()) / ina219_currentDivider_mA; }
-    float getPower_mW() { return (getPower_mW()) * ina219_powerMultiplier_mW; }
+    float getCurrent_mA() { return ((float)getCurrent_raw()) / ina219_currentDivider_mA; }
+    float getPower_mW() { return ((float)getPower_raw()) * ina219_powerMultiplier_mW; }
     void powerSave(bool on)
     {
         /*
@@ -265,17 +254,6 @@ public:
         */
     }
     bool success() { return _success; }
-
-private:
-    NEWI2C *_i2c_dev;
-
-    bool _success;
-    uint8_t ina219_i2caddr = -1;
-    UINT16UNION_t ina219_calValue.number;
-    // The following multipliers are used to convert raw current and power
-    // values to mA and mW, taking into account the current config settings
-    uint32_t ina219_currentDivider_mA;
-    float ina219_powerMultiplier_mW;
     int16_t getBusVoltage_raw()
     {
         /*
@@ -285,10 +263,11 @@ private:
             Adafruit_BusIO_Register(i2c_dev, INA219_REG_BUSVOLTAGE, 2, MSBFIRST);
         _success = bus_voltage_reg.read(&value);
         */
-        UINT16UNION_t value;
-        _i2c_dev->readMEMs(ina219_i2caddr, INA219_REG_BUSVOLTAGE,&value.bytes, 2);
+        INT16UNION_t value;
+        _i2c_dev->readMEMs(ina219_i2caddr, INA219_REG_BUSVOLTAGE, &value.bytes[0], 2);
+        swapDataByte(&value.bytes[0]);
         // Shift to the right 3 to drop CNVR and OVF and multiply by LSB
-        //return (int16_t)((value >> 3) * 4);
+        // return (int16_t)((value >> 3) * 4);
         return (int16_t)((value.number >> 3) * 4);
     }
     int16_t getShuntVoltage_raw()
@@ -300,9 +279,10 @@ private:
         _success = shunt_voltage_reg.read(&value);
         return value;
         */
-        UINT16UNION_t value;
-        _i2c_dev->readMEMs(ina219_i2caddr, INA219_REG_SHUNTVOLTAGE,&value.bytes, 2);
-        return value;
+        INT16UNION_t value;
+        _i2c_dev->readMEMs(ina219_i2caddr, INA219_REG_SHUNTVOLTAGE, &value.bytes[0], 2);
+        swapDataByte(&value.bytes[0]);
+        return value.number;
     }
     int16_t getCurrent_raw()
     {
@@ -323,6 +303,10 @@ private:
         _success = current_reg.read(&value);
         return value;
         */
+        INT16UNION_t value;
+        _i2c_dev->readMEMs(ina219_i2caddr, INA219_REG_CURRENT, &value.bytes[0], 2);
+        //swapDataByte(&value.bytes[0]);
+        return value.number;
     }
     int16_t getPower_raw()
     {
@@ -343,5 +327,27 @@ private:
         _success = power_reg.read(&value);
         return value;
         */
+        INT16UNION_t value;
+        _i2c_dev->readMEMs(ina219_i2caddr, INA219_REG_POWER, &value.bytes[0], 2);
+        //swapDataByte(&value.bytes[0]);
+        return value.number;
+    }
+
+
+private:
+    NEWI2C *_i2c_dev;
+
+    bool _success;
+    uint8_t ina219_i2caddr = -1;
+    UINT16UNION_t ina219_calValue;
+    // The following multipliers are used to convert raw current and power
+    // values to mA and mW, taking into account the current config settings
+    uint32_t ina219_currentDivider_mA;
+    float ina219_powerMultiplier_mW;
+    void swapDataByte(uint8_t *_data)
+    {
+        uint8_t _t = _data[0];
+        _data[0] = _data[1];
+        _data[1] = _t;
     }
 };

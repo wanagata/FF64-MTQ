@@ -16,4 +16,8 @@ typedef union{
   int number;
   uint8_t bytes[sizeof(int)];
 } INTUNION_t;
+typedef union{
+  int16_t number;
+  uint8_t bytes[sizeof(int16_t)];
+} INT16UNION_t;
 #endif

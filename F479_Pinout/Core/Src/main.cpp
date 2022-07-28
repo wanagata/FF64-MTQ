@@ -1,53 +1,58 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stdio.h"
-//#include "stm32newfnc/i2cscan.h"
+#include "stm32newfnc/i2cscan.h"
 #include "stm32newfnc/newuart.h"
 #include "stm32newfnc/newi2c.h"
 #include "driver/newpcf8574.h"
-//#include "driver/mpu6050.h"
-//#include "driver/newINA219.h"
+#include "driver/mpu6050.h"
+#include "driver/newINA219.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #define BAUDRATE 115200
 /* USER CODE END Includes */
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+MPU6050_t MPU6050;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 /* USER CODE END PD */
-#define pcf8574_addr (0x27<<1)
+#define pcf8574_addr (0x27 << 1)
+// xyz
+uint8_t cur_addr[3] = {0x41 << 1, 0x45 << 1, 0x40 << 1};
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-NEWUART Serial3(USART3,10,115200);
-NEWI2C I2C1BUS(I2C1,5);
-newpcf8574 pcf8574(&I2C1BUS,pcf8574_addr);
-//newINA219 curSen(&I2C1BUS);
+NEWUART Serial3(USART3, 10, 115200);
+NEWI2C I2C1BUS(I2C1, 100);
+newpcf8574 pcf8574(&I2C1BUS, pcf8574_addr);
+
+newINA219 curSenX(&I2C1BUS, cur_addr[0]);
+newINA219 curSenY(&I2C1BUS, cur_addr[1]);
+newINA219 curSenZ(&I2C1BUS, cur_addr[2]);
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-//I2C_HandleTypeDef hi2c1;
+// I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 I2C_HandleTypeDef hi2c3;
 
@@ -58,7 +63,7 @@ TIM_HandleTypeDef htim1;
 UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart5;
 UART_HandleTypeDef huart7;
-//UART_HandleTypeDef huart3;
+// UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 
@@ -67,14 +72,14 @@ UART_HandleTypeDef huart7;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-//static void MX_I2C1_Init(void);
+// static void MX_I2C1_Init(void);
 static void MX_I2C2_Init(void);
 static void MX_I2C3_Init(void);
 static void MX_TIM1_Init(void);
 
 static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
-
+void printCur(NEWUART *Serial, newINA219 *cur,float *sumw);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -83,9 +88,10 @@ static void MX_SPI1_Init(void);
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
+
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -110,44 +116,117 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  //MX_I2C1_Init();
+  // MX_I2C1_Init();
   MX_I2C2_Init();
   MX_I2C3_Init();
   MX_TIM1_Init();
+  Serial3.begin(115200);
+  // MX_USART3_UART_Init();
+  I2C1BUS.begin();
 
-  //MX_USART3_UART_Init();
-  Serial3.begin(9600);
+  // newINA219();
+  Serial3.print("CurSenZ:");
+  Serial3.printI(curSenZ.begin());
+  Serial3.print("CurSenY:");
+  Serial3.printI(curSenY.begin());
+  Serial3.println("CurSenX:");
+  Serial3.printI(curSenX.begin());
+
+  TIM1->CCR3 = 45000;
+  TIM1->CCR1 = 32767;
+  TIM1->CCR2 = 32767;
+   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  Serial3.println("EnablePower");
+  pcf8574.setPIN(7, 0);
+  pcf8574.setPIN(6, 1);
+  //pcf8574.setPIN(5, 0);
+  pcf8574.setPIN(4, 0);
+  //pcf8574.setPIN(3, 0);
+  pcf8574.setPIN(2, 0);
+  // pcf8574.setPIN(3,1);
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-  //i2cscanner(&hi2c1,&huart3);
-  //if(!MPU6050_Init(&hi2c2)){
-  //  Serial3.println("Error");
-  //}
+  i2cscanner(&hi2c2, Serial3.getHandleTypeDef());
+  while (MPU6050_Init(&hi2c2))
+  {
+    Serial3.println("Error");
+    HAL_Delay(100);
+  }
 
+  // HAL_Delay(10000);
   while (1)
   {
-
+	 float allload = 0.0f;
+     Serial3.print("X");
+     printCur(&Serial3, &curSenX,&allload);
+     Serial3.print("Y");
+     printCur(&Serial3, &curSenY,&allload);
+     Serial3.print("Z");
+     printCur(&Serial3, &curSenZ,&allload);
+     Serial3.print("Sum :");
+     Serial3.printF(allload);
+     Serial3.println("******************************************");
+    //MPU6050_Read_All(&hi2c2, &MPU6050);
+    //Serial3.printF(MPU6050.Temperature);
+   // Serial3.println("");
+    HAL_Delay(100);
   }
   /* USER CODE END 3 */
 }
+void printCur(NEWUART *Serial, newINA219 *cur,float *sumw)
+{
+  float shuntvoltage = 0;
+  float busvoltage = 0;
+  float current_mA = 0;
+  float loadvoltage = 0;
+  float power_mW = 0;
 
+  shuntvoltage = cur->getShuntVoltage_mV();
+  Serial->print("V:");
+  Serial->printF(shuntvoltage);
+  Serial->print(",");
+  HAL_Delay(1);
+  busvoltage = cur->getBusVoltage_V();
+  Serial->print("Vs:");
+  Serial->printF(busvoltage);
+  Serial->print(",");
+  HAL_Delay(1);
+  current_mA = cur->getCurrent_mA();
+  Serial->print("mA:");
+  Serial->printF(current_mA);
+  Serial->print(",");
+  *sumw += current_mA;
+  HAL_Delay(1);
+  power_mW = cur->getPower_mW();
+  Serial->print("mW:");
+  Serial->printF(power_mW);
+  Serial->print(",");
+  HAL_Delay(1);
+  loadvoltage = busvoltage + (shuntvoltage / 1000);
+  Serial->print("Vl:");
+  Serial->printF(loadvoltage);
+  Serial->println("");
+  HAL_Delay(1);
+}
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -163,9 +242,8 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
@@ -178,16 +256,16 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief I2C1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C1 Initialization Function
+ * @param None
+ * @retval None
+ */
 
 /**
-  * @brief I2C2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C2_Init(void)
 {
 
@@ -214,14 +292,13 @@ static void MX_I2C2_Init(void)
   /* USER CODE BEGIN I2C2_Init 2 */
 
   /* USER CODE END I2C2_Init 2 */
-
 }
 
 /**
-  * @brief I2C3 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C3 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C3_Init(void)
 {
 
@@ -248,14 +325,13 @@ static void MX_I2C3_Init(void)
   /* USER CODE BEGIN I2C3_Init 2 */
 
   /* USER CODE END I2C3_Init 2 */
-
 }
 
 /**
-  * @brief SPI1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief SPI1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_SPI1_Init(void)
 {
 
@@ -286,14 +362,13 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
-
 }
 
 /**
-  * @brief TIM1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief TIM1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_TIM1_Init(void)
 {
 
@@ -310,7 +385,7 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 2;
+  htim1.Init.Prescaler =0;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim1.Init.Period = 65535;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -369,7 +444,6 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 2 */
   HAL_TIM_MspPostInit(&htim1);
-
 }
 
 static void MX_GPIO_Init(void)
@@ -393,7 +467,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
 }
 
 /* USER CODE BEGIN 4 */
@@ -401,9 +474,9 @@ static void MX_GPIO_Init(void)
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -415,14 +488,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
