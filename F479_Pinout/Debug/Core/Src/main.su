@@ -25,23 +25,23 @@ c:\st\stm32cubeide_1.10.1\stm32cubeide\plugins\com.st.stm32cube.ide.mcu.external
 ../Core/Inc/driver/newINA219.h:152:5:newINA219::newINA219(NEWI2C*, uint8_t)	24	static
 ../Core/Inc/driver/newINA219.h:159:14:uint16_t newINA219::begin()	32	static
 ../Core/Inc/driver/newINA219.h:219:10:void newINA219::newCalibration()	32	static
-../Core/Inc/driver/newINA219.h:234:11:float newINA219::getBusVoltage_V()	16	static
-../Core/Inc/driver/newINA219.h:235:11:float newINA219::getShuntVoltage_mV()	16	static
-../Core/Inc/driver/newINA219.h:236:11:float newINA219::getCurrent_mA()	16	static
-../Core/Inc/driver/newINA219.h:237:11:float newINA219::getPower_mW()	16	static
-../Core/Inc/driver/newINA219.h:257:13:int16_t newINA219::getBusVoltage_raw()	32	static
-../Core/Inc/driver/newINA219.h:273:13:int16_t newINA219::getShuntVoltage_raw()	32	static
-../Core/Inc/driver/newINA219.h:287:13:int16_t newINA219::getCurrent_raw()	32	static
-../Core/Inc/driver/newINA219.h:311:13:int16_t newINA219::getPower_raw()	32	static
-../Core/Inc/driver/newINA219.h:347:10:void newINA219::swapDataByte(uint8_t*)	24	static
+../Core/Inc/driver/newINA219.h:235:11:float newINA219::getBusVoltage_V()	16	static
+../Core/Inc/driver/newINA219.h:236:11:float newINA219::getShuntVoltage_mV()	16	static
+../Core/Inc/driver/newINA219.h:237:11:float newINA219::getCurrent_mA()	16	static
+../Core/Inc/driver/newINA219.h:238:11:float newINA219::getPower_mW()	16	static
+../Core/Inc/driver/newINA219.h:258:13:int16_t newINA219::getBusVoltage_raw()	32	static
+../Core/Inc/driver/newINA219.h:274:13:int16_t newINA219::getShuntVoltage_raw()	32	static
+../Core/Inc/driver/newINA219.h:288:13:int16_t newINA219::getCurrent_raw()	32	static
+../Core/Inc/driver/newINA219.h:312:13:int16_t newINA219::getPower_raw()	32	static
+../Core/Inc/driver/newINA219.h:348:10:void newINA219::swapDataByte(uint8_t*)	24	static
 ../Core/Src/main.cpp:95:5:int main()	16	static
-../Core/Src/main.cpp:178:6:void printCur(NEWUART*, newINA219*, float*)	48	static
-../Core/Src/main.cpp:217:6:void SystemClock_Config()	88	static
-../Core/Src/main.cpp:269:13:void MX_I2C2_Init()	8	static
-../Core/Src/main.cpp:302:13:void MX_I2C3_Init()	8	static
-../Core/Src/main.cpp:335:13:void MX_SPI1_Init()	8	static
-../Core/Src/main.cpp:372:13:void MX_TIM1_Init()	96	static
-../Core/Src/main.cpp:449:13:void MX_GPIO_Init()	56	static
-../Core/Src/main.cpp:480:6:void Error_Handler()	4	static,ignoring_inline_asm
-../Core/Src/main.cpp:489:1:void __static_initialization_and_destruction_0(int, int)	16	static
-../Core/Src/main.cpp:489:1:cpp)	8	static
+../Core/Src/main.cpp:179:6:void printCur(NEWUART*, newINA219*, float*)	48	static
+../Core/Src/main.cpp:218:6:void SystemClock_Config()	88	static
+../Core/Src/main.cpp:270:13:void MX_I2C2_Init()	8	static
+../Core/Src/main.cpp:303:13:void MX_I2C3_Init()	8	static
+../Core/Src/main.cpp:336:13:void MX_SPI1_Init()	8	static
+../Core/Src/main.cpp:373:13:void MX_TIM1_Init()	96	static
+../Core/Src/main.cpp:450:13:void MX_GPIO_Init()	56	static
+../Core/Src/main.cpp:481:6:void Error_Handler()	4	static,ignoring_inline_asm
+../Core/Src/main.cpp:490:1:void __static_initialization_and_destruction_0(int, int)	16	static
+../Core/Src/main.cpp:490:1:cpp)	8	static

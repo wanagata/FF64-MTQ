@@ -222,11 +222,12 @@ public:
         // Set multipliers to convert raw current/power values
         ina219_currentDivider_mA = 20;    // Current LSB = 50uA per bit (1000/50 = 20)
         ina219_powerMultiplier_mW = 1.0f; // Power LSB = 1mW per bit
+        //swapDataByte(&ina219_calValue.bytes[0]);
         _i2c_dev->writeMEMs(ina219_i2caddr,INA219_REG_CALIBRATION, &ina219_calValue.bytes[0], 2);
         UINT16UNION_t config;
         config.number = INA219_CONFIG_BVOLTAGERANGE_16V |
-                        INA219_CONFIG_GAIN_2_80MV | INA219_CONFIG_BADCRES_12BIT |
-                        INA219_CONFIG_BADCRES_12BIT_128S_69MS |
+                        INA219_CONFIG_GAIN_2_80MV | INA219_CONFIG_BADCRES_12BIT_32S_17MS |
+                        INA219_CONFIG_SADCRES_12BIT_32S_17MS |
                         INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
         swapDataByte(&config.bytes[0]);
         _i2c_dev->writeMEMs(ina219_i2caddr,INA219_REG_CONFIG, &config.bytes[0], 2);

@@ -132,18 +132,18 @@ int main(void)
   Serial3.println("CurSenX:");
   Serial3.printI(curSenX.begin());
 
-  TIM1->CCR3 = 7500;
-  TIM1->CCR1 = 10000;
-  TIM1->CCR2 = 10000;
+  TIM1->CCR3 = 30000;
+  TIM1->CCR1 = 32767;
+  TIM1->CCR2 = 32767;
    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   Serial3.println("EnablePower");
-  pcf8574.setPIN(7, 0);
+  pcf8574.setPIN(7, 1);
   pcf8574.setPIN(6, 1);
   //pcf8574.setPIN(5, 0);
   pcf8574.setPIN(4, 0);
-  pcf8574.setPIN(3, 0);
+  //pcf8574.setPIN(3, 0);
   pcf8574.setPIN(2, 0);
   // pcf8574.setPIN(3,1);
   MX_SPI1_Init();
@@ -168,7 +168,6 @@ int main(void)
      Serial3.print("Sum :");
      Serial3.printF(allload);
      Serial3.println("******************************************");
-
     //MPU6050_Read_All(&hi2c2, &MPU6050);
     //Serial3.printF(MPU6050.Temperature);
    // Serial3.println("");

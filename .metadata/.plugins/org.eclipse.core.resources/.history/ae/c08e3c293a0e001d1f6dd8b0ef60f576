@@ -132,9 +132,9 @@ int main(void)
   Serial3.println("CurSenX:");
   Serial3.printI(curSenX.begin());
 
-  TIM1->CCR3 = 7500;
-  TIM1->CCR1 = 10000;
-  TIM1->CCR2 = 10000;
+  TIM1->CCR3 = 45000;
+  TIM1->CCR1 = 32767;
+  TIM1->CCR2 = 32767;
    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
@@ -143,7 +143,7 @@ int main(void)
   pcf8574.setPIN(6, 1);
   //pcf8574.setPIN(5, 0);
   pcf8574.setPIN(4, 0);
-  pcf8574.setPIN(3, 0);
+  //pcf8574.setPIN(3, 0);
   pcf8574.setPIN(2, 0);
   // pcf8574.setPIN(3,1);
   MX_SPI1_Init();
@@ -168,7 +168,6 @@ int main(void)
      Serial3.print("Sum :");
      Serial3.printF(allload);
      Serial3.println("******************************************");
-
     //MPU6050_Read_All(&hi2c2, &MPU6050);
     //Serial3.printF(MPU6050.Temperature);
    // Serial3.println("");
@@ -386,9 +385,9 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler =1;
-  htim1.Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED1;
-  htim1.Init.Period = 30000;
+  htim1.Init.Prescaler =0;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED2;
+  htim1.Init.Period = 50000;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;

@@ -132,7 +132,7 @@ int main(void)
   Serial3.println("CurSenX:");
   Serial3.printI(curSenX.begin());
 
-  TIM1->CCR3 = 7500;
+  TIM1->CCR3 = 1500;
   TIM1->CCR1 = 10000;
   TIM1->CCR2 = 10000;
    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
