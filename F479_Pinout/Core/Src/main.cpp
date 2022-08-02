@@ -22,10 +22,10 @@
 #include "stm32newfnc/i2cscan.h"
 #include "stm32newfnc/newuart.h"
 #include "stm32newfnc/newi2c.h"
+#include "stm32newfnc/newpwm.h"
 #include "driver/newpcf8574.h"
 #include "driver/mpu6050.h"
 #include "driver/newINA219.h"
-#include "stm32newfnc/newpwm.h"
 #include "driver/newMTQ.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -39,6 +39,12 @@ MPU6050_t MPU6050;
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 /* USER CODE END PD */
+#define MTQx_ENA_PIN 2
+#define MTQy_ENA_PIN 4
+#define MTQz_ENA_PIN 6
+#define MTQx_DIR_PIN 3
+#define MTQy_DIR_PIN 5
+#define MTQz_DIR_PIN 7
 #define pcf8574_addr (0x27 << 1)
 // xyz
 enum
@@ -78,7 +84,6 @@ SPI_HandleTypeDef hspi1;
 // UART_HandleTypeDef huart4;
 // UART_HandleTypeDef huart5;
 // UART_HandleTypeDef huart7;
-
 // UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
@@ -110,26 +115,8 @@ void printCur(NEWUART *Serial, NEWMTQ *MTQ, float *sumw);
 
 int main(void)
 {
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
   SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
   MX_GPIO_Init();
   // MX_I2C1_Init();
   // MX_I2C2_Init();
@@ -140,10 +127,10 @@ int main(void)
   Serial3.begin(115200);
   I2C1BUS.begin();
   I2C2BUS.begin();
-  MTQ[z].begin(7, 6, TIM_CHANNEL_3, 255);
-  MTQ[y].begin(5, 4, TIM_CHANNEL_2, 255);
-  MTQ[x].begin(3, 2, TIM_CHANNEL_1, 255);
-  MTQ[z].run_pwm(20);
+  MTQ[z].begin(MTQz_DIR_PIN, MTQz_ENA_PIN, TIM_CHANNEL_3, 255);
+  MTQ[y].begin(MTQy_DIR_PIN, MTQy_ENA_PIN, TIM_CHANNEL_2, 255);
+  MTQ[x].begin(MTQx_DIR_PIN, MTQx_ENA_PIN, TIM_CHANNEL_1, 255);
+  
   Serial3.println("EnablePower");
 
   i2cscanner(I2C2BUS.getHandleTypeDef(), Serial3.getHandleTypeDef());
@@ -152,32 +139,57 @@ int main(void)
     Serial3.println("Error");
     HAL_Delay(100);
   }
-
   while (1)
   {
-    float allload = 0.0f;
-    Serial3.print("X");
-    printCur(&Serial3, &MTQ[x], &allload);
-    Serial3.print("Y");
-    printCur(&Serial3, &MTQ[y], &allload);
-    Serial3.print("Z");
-    printCur(&Serial3, &MTQ[z], &allload);
-    Serial3.print("Sum :");
-    Serial3.printF(allload);
-    Serial3.println("******************************************");
-
-    // MPU6050_Read_All(&hi2c2, &MPU6050);
-    // Serial3.printF(MPU6050.Temperature);
-    // Serial3.println("");
-    HAL_Delay(100);
+    int i =0;
+    while (i<100)
+    {
+      float allload = 0.0f;
+      MTQ[z].run_pwm(20);
+      Serial3.print("X");
+      printCur(&Serial3, &MTQ[x], &allload);
+      Serial3.print("Y");
+      printCur(&Serial3, &MTQ[y], &allload);
+      Serial3.print("Z");
+      printCur(&Serial3, &MTQ[z], &allload);
+      Serial3.print("Sum :");
+      Serial3.printF(allload);
+      Serial3.println("******************************************");
+      //MPU6050_Read_All(I2C2BUS.getHandleTypeDef(), &MPU6050);
+      //Serial3.printF(MPU6050.KalmanAngleX);
+      //Serial3.println("");
+      HAL_Delay(100);
+      i++;
+    }
+    i=0;
+    while (i<100)
+    {
+      float allload = 0.0f;
+      MTQ[z].run_pwm(100);
+      Serial3.print("X");
+      printCur(&Serial3, &MTQ[x], &allload);
+      Serial3.print("Y");
+      printCur(&Serial3, &MTQ[y], &allload);
+      Serial3.print("Z");
+      printCur(&Serial3, &MTQ[z], &allload);
+      Serial3.print("Sum :");
+      Serial3.printF(allload);
+      Serial3.println("******************************************");
+      //MPU6050_Read_All(I2C2BUS.getHandleTypeDef(), &MPU6050);
+      //Serial3.printF(MPU6050.KalmanAngleX);
+      //Serial3.println("");
+      HAL_Delay(100);
+      i++;
+    }
   }
+
   /* USER CODE END 3 */
 }
 void printCur(NEWUART *Serial, NEWMTQ *MTQ, float *sumw)
 {
   float mA = MTQ->read_mA();
   Serial->print("mA:");
-  Serial->printF(MTQ->read_mA());
+  Serial->printF(mA);
   Serial->println("");
   *sumw += mA;
 }

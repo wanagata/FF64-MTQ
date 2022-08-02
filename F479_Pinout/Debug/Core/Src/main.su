@@ -12,6 +12,10 @@
 ../Core/Inc/stm32newfnc/newi2c.h:37:10:void NEWI2C::writeBytes(uint8_t, uint8_t*, uint8_t)	32	static
 ../Core/Inc/stm32newfnc/newi2c.h:50:10:void NEWI2C::readMEMs(uint8_t, uint8_t, uint8_t*, uint8_t)	48	static
 ../Core/Inc/stm32newfnc/newi2c.h:53:10:void NEWI2C::writeMEMs(uint8_t, uint8_t, uint8_t*, uint8_t)	48	static
+../Core/Inc/stm32newfnc/newpwm.h:15:5:NEWPWM::NEWPWM(TIM_TypeDef*, uint32_t)	24	static
+../Core/Inc/stm32newfnc/newpwm.h:32:10:void NEWPWM::run_ch_pwm(uint32_t, uint16_t)	24	static
+../Core/Inc/stm32newfnc/newpwm.h:50:13:uint8_t NEWPWM::get_is_begun()	16	static
+../Core/Inc/stm32newfnc/newpwm.h:51:10:void NEWPWM::begin()	104	static
 ../Core/Inc/driver/newpcf8574.h:26:5:newpcf8574::newpcf8574(NEWI2C*, int, uint8_t)	24	static
 ../Core/Inc/driver/newpcf8574.h:33:10:void newpcf8574::setPIN(uint8_t, uint8_t)	24	static
 ../Core/Inc/driver/mpu6050.h:126:9:uint8_t MPU6050_Init(I2C_HandleTypeDef*)	40	static
@@ -28,10 +32,6 @@ c:\st\stm32cubeide_1.10.1\stm32cubeide\plugins\com.st.stm32cube.ide.mcu.external
 ../Core/Inc/driver/newINA219.h:239:11:float newINA219::getCurrent_mA()	16	static
 ../Core/Inc/driver/newINA219.h:290:13:int16_t newINA219::getCurrent_raw()	32	static
 ../Core/Inc/driver/newINA219.h:350:10:void newINA219::swapDataByte(uint8_t*)	24	static
-../Core/Inc/stm32newfnc/newpwm.h:15:5:NEWPWM::NEWPWM(TIM_TypeDef*, uint32_t)	24	static
-../Core/Inc/stm32newfnc/newpwm.h:32:10:void NEWPWM::run_ch_pwm(uint32_t, uint16_t)	24	static
-../Core/Inc/stm32newfnc/newpwm.h:50:13:uint8_t NEWPWM::get_is_begun()	16	static
-../Core/Inc/stm32newfnc/newpwm.h:51:10:void NEWPWM::begin()	104	static
 ../Core/Inc/driver/newMTQ.h:20:5:NEWMTQ::NEWMTQ(newpcf8574*, newINA219*, NEWPWM*)	24	static
 ../Core/Inc/driver/newMTQ.h:30:10:void NEWMTQ::set_pwm_resolution(uint8_t)	16	static
 ../Core/Inc/driver/newMTQ.h:31:10:void NEWMTQ::set_tim_ch(uint8_t)	16	static
@@ -39,12 +39,12 @@ c:\st\stm32cubeide_1.10.1\stm32cubeide\plugins\com.st.stm32cube.ide.mcu.external
 ../Core/Inc/driver/newMTQ.h:33:10:void NEWMTQ::set_ena_pin(uint8_t)	16	static
 ../Core/Inc/driver/newMTQ.h:35:10:void NEWMTQ::begin(uint8_t, uint8_t, uint8_t, uint8_t)	16	static
 ../Core/Inc/driver/newMTQ.h:49:10:void NEWMTQ::run_pwm(int16_t)	16	static
-../Core/Inc/driver/newMTQ.h:71:11:float NEWMTQ::read_mA()	16	static
-../Core/Src/main.cpp:111:5:int main()	32	static
-../Core/Src/main.cpp:176:6:void printCur(NEWUART*, NEWMTQ*, float*)	32	static
-../Core/Src/main.cpp:188:6:void SystemClock_Config()	88	static
-../Core/Src/main.cpp:234:13:void MX_SPI1_Init()	8	static
-../Core/Src/main.cpp:266:13:void MX_GPIO_Init()	56	static
-../Core/Src/main.cpp:297:6:void Error_Handler()	4	static,ignoring_inline_asm
-../Core/Src/main.cpp:306:1:void __static_initialization_and_destruction_0(int, int)	32	static
-../Core/Src/main.cpp:306:1:cpp)	8	static
+../Core/Inc/driver/newMTQ.h:75:11:float NEWMTQ::read_mA()	16	static
+../Core/Src/main.cpp:116:5:int main()	40	static
+../Core/Src/main.cpp:188:6:void printCur(NEWUART*, NEWMTQ*, float*)	32	static
+../Core/Src/main.cpp:200:6:void SystemClock_Config()	88	static
+../Core/Src/main.cpp:246:13:void MX_SPI1_Init()	8	static
+../Core/Src/main.cpp:278:13:void MX_GPIO_Init()	56	static
+../Core/Src/main.cpp:309:6:void Error_Handler()	4	static,ignoring_inline_asm
+../Core/Src/main.cpp:318:1:void __static_initialization_and_destruction_0(int, int)	32	static
+../Core/Src/main.cpp:318:1:cpp)	8	static

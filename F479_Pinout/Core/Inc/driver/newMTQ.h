@@ -68,9 +68,11 @@ public:
         _timer->run_ch_pwm(_tim_ch, ab_cur_pwm);
         _ioxpander->setPIN(_ena_pin,1);
     }
-    float read_mA(){
-        return _current->getCurrent_mA();
+    float read_loadV(){
+        float loadvoltage = _current->getBusVoltage_V() + (_current->getShuntVoltage_mV() / 1000);
+        return loadvoltage;
     }
+    float read_mA(){ return _current->getCurrent_mA(); }
     newINA219 *get_current_sen() { return _current; }
     newpcf8574 *get_ioxpander() { return _ioxpander; }
 };
