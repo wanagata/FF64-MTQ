@@ -27,6 +27,8 @@
 #include "driver/mpu6050.h"
 #include "driver/newINA219.h"
 #include "driver/newMTQ.h"
+#include "utility/Attitude.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #define BAUDRATE 115200
@@ -141,46 +143,7 @@ int main(void)
   }
   while (1)
   {
-    int i =0;
-    while (i<100)
-    {
-      float allload = 0.0f;
-      MTQ[z].run_pwm(20);
-      Serial3.print("X");
-      printCur(&Serial3, &MTQ[x], &allload);
-      Serial3.print("Y");
-      printCur(&Serial3, &MTQ[y], &allload);
-      Serial3.print("Z");
-      printCur(&Serial3, &MTQ[z], &allload);
-      Serial3.print("Sum :");
-      Serial3.printF(allload);
-      Serial3.println("******************************************");
-      //MPU6050_Read_All(I2C2BUS.getHandleTypeDef(), &MPU6050);
-      //Serial3.printF(MPU6050.KalmanAngleX);
-      //Serial3.println("");
-      HAL_Delay(100);
-      i++;
-    }
-    i=0;
-    while (i<100)
-    {
-      float allload = 0.0f;
-      MTQ[z].run_pwm(100);
-      Serial3.print("X");
-      printCur(&Serial3, &MTQ[x], &allload);
-      Serial3.print("Y");
-      printCur(&Serial3, &MTQ[y], &allload);
-      Serial3.print("Z");
-      printCur(&Serial3, &MTQ[z], &allload);
-      Serial3.print("Sum :");
-      Serial3.printF(allload);
-      Serial3.println("******************************************");
-      //MPU6050_Read_All(I2C2BUS.getHandleTypeDef(), &MPU6050);
-      //Serial3.printF(MPU6050.KalmanAngleX);
-      //Serial3.println("");
-      HAL_Delay(100);
-      i++;
-    }
+    
   }
 
   /* USER CODE END 3 */
