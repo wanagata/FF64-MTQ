@@ -25,6 +25,8 @@
 #include "driver/newpcf8574.h"
 #include "driver/mpu6050.h"
 #include "driver/newINA219.h"
+#include "stm32newfnc/newpwm.h"
+#include "driver/newMTQ.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #define BAUDRATE 115200
@@ -39,30 +41,44 @@ MPU6050_t MPU6050;
 /* USER CODE END PD */
 #define pcf8574_addr (0x27 << 1)
 // xyz
+enum
+{
+  x = 0,
+  y = 1,
+  z = 2
+};
 uint8_t cur_addr[3] = {0x41 << 1, 0x45 << 1, 0x40 << 1};
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 NEWUART Serial3(USART3, 10, 115200);
 NEWI2C I2C1BUS(I2C1, 100);
+NEWI2C I2C2BUS(I2C2, 100);
+NEWPWM PWMTIM1(TIM1);
 newpcf8574 pcf8574(&I2C1BUS, pcf8574_addr);
 
-newINA219 curSenX(&I2C1BUS, cur_addr[0]);
-newINA219 curSenY(&I2C1BUS, cur_addr[1]);
-newINA219 curSenZ(&I2C1BUS, cur_addr[2]);
+newINA219 curSenX(&I2C1BUS, cur_addr[x]);
+newINA219 curSenY(&I2C1BUS, cur_addr[y]);
+newINA219 curSenZ(&I2C1BUS, cur_addr[z]);
+
+NEWMTQ MTQx(&pcf8574, &curSenX, &PWMTIM1);
+NEWMTQ MTQy(&pcf8574, &curSenY, &PWMTIM1);
+NEWMTQ MTQz(&pcf8574, &curSenZ, &PWMTIM1);
+NEWMTQ MTQ[3] = {MTQx, MTQy, MTQz};
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 // I2C_HandleTypeDef hi2c1;
-I2C_HandleTypeDef hi2c2;
-I2C_HandleTypeDef hi2c3;
+// I2C_HandleTypeDef hi2c2;
+// I2C_HandleTypeDef hi2c3;
 
 SPI_HandleTypeDef hspi1;
 
-TIM_HandleTypeDef htim1;
+// TIM_HandleTypeDef htim1;
 
-UART_HandleTypeDef huart4;
-UART_HandleTypeDef huart5;
-UART_HandleTypeDef huart7;
+// UART_HandleTypeDef huart4;
+// UART_HandleTypeDef huart5;
+// UART_HandleTypeDef huart7;
+
 // UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
@@ -73,13 +89,13 @@ UART_HandleTypeDef huart7;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 // static void MX_I2C1_Init(void);
-static void MX_I2C2_Init(void);
-static void MX_I2C3_Init(void);
-static void MX_TIM1_Init(void);
+// static void MX_I2C2_Init(void);
+// static void MX_I2C3_Init(void);
+// static void MX_TIM1_Init(void);
 
 static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
-void printCur(NEWUART *Serial, newINA219 *cur,float *sumw);
+void printCur(NEWUART *Serial, NEWMTQ *MTQ, float *sumw);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -94,7 +110,6 @@ void printCur(NEWUART *Serial, newINA219 *cur,float *sumw);
 
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
 
@@ -117,99 +132,54 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   // MX_I2C1_Init();
-  MX_I2C2_Init();
-  MX_I2C3_Init();
-  MX_TIM1_Init();
-  Serial3.begin(115200);
-  // MX_USART3_UART_Init();
-  I2C1BUS.begin();
-
-  // newINA219();
-  Serial3.print("CurSenZ:");
-  Serial3.printI(curSenZ.begin());
-  Serial3.print("CurSenY:");
-  Serial3.printI(curSenY.begin());
-  Serial3.println("CurSenX:");
-  Serial3.printI(curSenX.begin());
-
-  TIM1->CCR3 = 7500;
-  TIM1->CCR1 = 10000;
-  TIM1->CCR2 = 10000;
-   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
-   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-  Serial3.println("EnablePower");
-  pcf8574.setPIN(7, 0);
-  pcf8574.setPIN(6, 1);
-  //pcf8574.setPIN(5, 0);
-  pcf8574.setPIN(4, 0);
-  pcf8574.setPIN(3, 0);
-  pcf8574.setPIN(2, 0);
-  // pcf8574.setPIN(3,1);
+  // MX_I2C2_Init();
+  // MX_I2C3_Init();
+  // MX_TIM1_Init();
   MX_SPI1_Init();
-  /* USER CODE BEGIN 2 */
-  i2cscanner(&hi2c2, Serial3.getHandleTypeDef());
-  while (MPU6050_Init(&hi2c2))
+
+  Serial3.begin(115200);
+  I2C1BUS.begin();
+  I2C2BUS.begin();
+  MTQ[z].begin(7, 6, TIM_CHANNEL_3, 255);
+  MTQ[y].begin(5, 4, TIM_CHANNEL_2, 255);
+  MTQ[x].begin(3, 2, TIM_CHANNEL_1, 255);
+  MTQ[z].run_pwm(20);
+  Serial3.println("EnablePower");
+
+  i2cscanner(I2C2BUS.getHandleTypeDef(), Serial3.getHandleTypeDef());
+  while (MPU6050_Init(I2C2BUS.getHandleTypeDef()))
   {
     Serial3.println("Error");
     HAL_Delay(100);
   }
 
-  // HAL_Delay(10000);
   while (1)
   {
-	 float allload = 0.0f;
-     Serial3.print("X");
-     printCur(&Serial3, &curSenX,&allload);
-     Serial3.print("Y");
-     printCur(&Serial3, &curSenY,&allload);
-     Serial3.print("Z");
-     printCur(&Serial3, &curSenZ,&allload);
-     Serial3.print("Sum :");
-     Serial3.printF(allload);
-     Serial3.println("******************************************");
+    float allload = 0.0f;
+    Serial3.print("X");
+    printCur(&Serial3, &MTQ[x], &allload);
+    Serial3.print("Y");
+    printCur(&Serial3, &MTQ[y], &allload);
+    Serial3.print("Z");
+    printCur(&Serial3, &MTQ[z], &allload);
+    Serial3.print("Sum :");
+    Serial3.printF(allload);
+    Serial3.println("******************************************");
 
-    //MPU6050_Read_All(&hi2c2, &MPU6050);
-    //Serial3.printF(MPU6050.Temperature);
-   // Serial3.println("");
+    // MPU6050_Read_All(&hi2c2, &MPU6050);
+    // Serial3.printF(MPU6050.Temperature);
+    // Serial3.println("");
     HAL_Delay(100);
   }
   /* USER CODE END 3 */
 }
-void printCur(NEWUART *Serial, newINA219 *cur,float *sumw)
+void printCur(NEWUART *Serial, NEWMTQ *MTQ, float *sumw)
 {
-  float shuntvoltage = 0;
-  float busvoltage = 0;
-  float current_mA = 0;
-  float loadvoltage = 0;
-  float power_mW = 0;
-
-  shuntvoltage = cur->getShuntVoltage_mV();
-  Serial->print("V:");
-  Serial->printF(shuntvoltage);
-  Serial->print(",");
-  HAL_Delay(1);
-  busvoltage = cur->getBusVoltage_V();
-  Serial->print("Vs:");
-  Serial->printF(busvoltage);
-  Serial->print(",");
-  HAL_Delay(1);
-  current_mA = cur->getCurrent_mA();
+  float mA = MTQ->read_mA();
   Serial->print("mA:");
-  Serial->printF(current_mA);
-  Serial->print(",");
-  *sumw += current_mA;
-  HAL_Delay(1);
-  power_mW = cur->getPower_mW();
-  Serial->print("mW:");
-  Serial->printF(power_mW);
-  Serial->print(",");
-  HAL_Delay(1);
-  loadvoltage = busvoltage + (shuntvoltage / 1000);
-  Serial->print("Vl:");
-  Serial->printF(loadvoltage);
+  Serial->printF(MTQ->read_mA());
   Serial->println("");
-  HAL_Delay(1);
+  *sumw += mA;
 }
 /**
  * @brief System Clock Configuration
@@ -257,78 +227,6 @@ void SystemClock_Config(void)
 }
 
 /**
- * @brief I2C1 Initialization Function
- * @param None
- * @retval None
- */
-
-/**
- * @brief I2C2 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_I2C2_Init(void)
-{
-
-  /* USER CODE BEGIN I2C2_Init 0 */
-
-  /* USER CODE END I2C2_Init 0 */
-
-  /* USER CODE BEGIN I2C2_Init 1 */
-
-  /* USER CODE END I2C2_Init 1 */
-  hi2c2.Instance = I2C2;
-  hi2c2.Init.ClockSpeed = 100000;
-  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c2.Init.OwnAddress1 = 0;
-  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c2.Init.OwnAddress2 = 0;
-  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN I2C2_Init 2 */
-
-  /* USER CODE END I2C2_Init 2 */
-}
-
-/**
- * @brief I2C3 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_I2C3_Init(void)
-{
-
-  /* USER CODE BEGIN I2C3_Init 0 */
-
-  /* USER CODE END I2C3_Init 0 */
-
-  /* USER CODE BEGIN I2C3_Init 1 */
-
-  /* USER CODE END I2C3_Init 1 */
-  hi2c3.Instance = I2C3;
-  hi2c3.Init.ClockSpeed = 100000;
-  hi2c3.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c3.Init.OwnAddress1 = 0;
-  hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c3.Init.OwnAddress2 = 0;
-  hi2c3.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c3.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN I2C3_Init 2 */
-
-  /* USER CODE END I2C3_Init 2 */
-}
-
-/**
  * @brief SPI1 Initialization Function
  * @param None
  * @retval None
@@ -363,88 +261,6 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
-}
-
-/**
- * @brief TIM1 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_TIM1_Init(void)
-{
-
-  /* USER CODE BEGIN TIM1_Init 0 */
-
-  /* USER CODE END TIM1_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
-
-  /* USER CODE BEGIN TIM1_Init 1 */
-
-  /* USER CODE END TIM1_Init 1 */
-  htim1.Instance = TIM1;
-  htim1.Init.Prescaler =1;
-  htim1.Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED1;
-  htim1.Init.Period = 30000;
-  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim1.Init.RepetitionCounter = 0;
-  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
-  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
-  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 0;
-  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
-  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
-  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
-  if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM1_Init 2 */
-
-  /* USER CODE END TIM1_Init 2 */
-  HAL_TIM_MspPostInit(&htim1);
 }
 
 static void MX_GPIO_Init(void)

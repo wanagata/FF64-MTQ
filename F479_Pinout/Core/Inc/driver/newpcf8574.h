@@ -1,3 +1,5 @@
+#ifndef _NEWPCF8574_H_
+#define _NEWPCF8574_H_
 #include "stm32f4xx_hal.h"
 #include "stm32newfnc/newi2c.h"
 
@@ -50,3 +52,4 @@ public:
         }
     }
 };
+#endif

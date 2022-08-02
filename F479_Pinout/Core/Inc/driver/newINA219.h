@@ -1,3 +1,5 @@
+#ifndef _NEWINA219_H_
+#define _NEWINA219_H_
 #include "stm32f4xx_hal.h"
 #include "stm32newfnc/newi2c.h"
 #include "utility/multconvert.h"
@@ -352,3 +354,5 @@ private:
         _data[1] = _t;
     }
 };
+
+#endif //
