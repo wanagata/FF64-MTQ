@@ -1764,3 +1764,49 @@
 2022-08-02 13:00:27,078 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
 2022-08-02 13:00:27,079 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Defaulting to no-operation (NOP) logger implementation
 2022-08-02 13:00:27,080 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+2022-08-03 11:13:24,988 [INFO] Activator:177 - 
+
+
+2022-08-03 11:13:24,989 [INFO] Activator:178 - !SESSION log4j initialized
+2022-08-03 11:13:53,063 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+2022-08-03 11:13:53,064 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Defaulting to no-operation (NOP) logger implementation
+2022-08-03 11:13:53,065 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+2022-08-03 13:14:28,497 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:28,498 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:29,485 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:29,485 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:30,484 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:30,484 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:31,482 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:31,483 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:32,483 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:32,483 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:33,479 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:33,479 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:34,476 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:34,476 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:35,490 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:35,490 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:36,490 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:36,491 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:37,488 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:37,488 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:38,482 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:38,483 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:39,483 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:39,484 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:40,485 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:40,486 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:41,489 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:41,489 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:42,487 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:42,487 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 13:14:43,482 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] [Fatal Error] :1:1: Premature end of file.
+2022-08-03 13:14:43,482 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] 
+2022-08-03 14:25:11,680 [INFO] Activator:177 - 
+
+
+2022-08-03 14:25:11,680 [INFO] Activator:178 - !SESSION log4j initialized
+2022-08-03 14:25:39,281 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+2022-08-03 14:25:39,281 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Defaulting to no-operation (NOP) logger implementation
+2022-08-03 14:25:39,281 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.

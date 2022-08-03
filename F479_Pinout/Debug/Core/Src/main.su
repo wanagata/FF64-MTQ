@@ -4,6 +4,7 @@
 ../Core/Inc/stm32newfnc/newuart.h:39:10:void NEWUART::begin(uint32_t)	16	static
 ../Core/Inc/stm32newfnc/newuart.h:57:10:void NEWUART::writeBytes(uint8_t*, uint8_t)	24	static
 ../Core/Inc/stm32newfnc/newuart.h:62:10:void NEWUART::print(const char*)	56	dynamic
+../Core/Inc/stm32newfnc/newuart.h:73:10:void NEWUART::printI(int16_t)	32	static
 ../Core/Inc/stm32newfnc/newuart.h:79:10:void NEWUART::printF(float)	32	static
 ../Core/Inc/stm32newfnc/newuart.h:85:10:void NEWUART::println(const char*)	16	static
 ../Core/Inc/stm32newfnc/newi2c.h:14:5:NEWI2C::NEWI2C(I2C_TypeDef*, uint32_t, uint32_t)	24	static
@@ -41,10 +42,10 @@ c:\st\stm32cubeide_1.10.1\stm32cubeide\plugins\com.st.stm32cube.ide.mcu.external
 ../Core/Inc/driver/newMTQ.h:49:10:void NEWMTQ::run_pwm(int16_t)	16	static
 ../Core/Inc/driver/newMTQ.h:75:11:float NEWMTQ::read_mA()	16	static
 ../Core/Src/main.cpp:116:5:int main()	40	static
-../Core/Src/main.cpp:188:6:void printCur(NEWUART*, NEWMTQ*, float*)	32	static
-../Core/Src/main.cpp:200:6:void SystemClock_Config()	88	static
-../Core/Src/main.cpp:246:13:void MX_SPI1_Init()	8	static
-../Core/Src/main.cpp:278:13:void MX_GPIO_Init()	56	static
-../Core/Src/main.cpp:309:6:void Error_Handler()	4	static,ignoring_inline_asm
-../Core/Src/main.cpp:318:1:void __static_initialization_and_destruction_0(int, int)	32	static
-../Core/Src/main.cpp:318:1:cpp)	8	static
+../Core/Src/main.cpp:177:6:void printCur(NEWUART*, NEWMTQ*, float*)	32	static
+../Core/Src/main.cpp:189:6:void SystemClock_Config()	88	static
+../Core/Src/main.cpp:235:13:void MX_SPI1_Init()	8	static
+../Core/Src/main.cpp:267:13:void MX_GPIO_Init()	56	static
+../Core/Src/main.cpp:298:6:void Error_Handler()	4	static,ignoring_inline_asm
+../Core/Src/main.cpp:307:1:void __static_initialization_and_destruction_0(int, int)	32	static
+../Core/Src/main.cpp:307:1:cpp)	8	static
