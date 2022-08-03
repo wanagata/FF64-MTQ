@@ -1,6 +1,9 @@
+#ifndef _NEWUART_H_
+#define _NEWUART_H_
 #include "stm32f4xx_hal.h"
 #include "stdio.h"
 #include "string.h"
+
 /*
  uint8_t buffer;
             uint8_t error;
@@ -88,3 +91,4 @@ public:
         print("\r\n");
     }
 };
+#endif

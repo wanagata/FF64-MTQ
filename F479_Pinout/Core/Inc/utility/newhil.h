@@ -1,6 +1,6 @@
 #ifndef _NEWHIL_H_
 #define _NEWHIL_H_
-using namespace std;
+//using namespace std;
 #include "multconvert.h"
 #include "stm32newfnc/newuart.h"
 // T for datatype, n_in for n inputs, n_out for n outputs
@@ -37,7 +37,7 @@ public:
 
         for (int i = 0; i < n_in; i++)
         {
-            buffer_out = getData();
+            buffer_out[i] = getData();
         }
         return 1;
     }
@@ -45,20 +45,20 @@ public:
     T getData()
     {
         datapack temp;
-        for (int i = 0; i < sizeof(datapack); i++)
+        for (uint8_t i = 0; i < sizeof(datapack); i++)
         {
-            _Serial->readByte(temp.bytes[i]);
+            _Serial->readByte(&temp.bytes[i]);
         }
         return temp.value;
     }
 
     void sendData(T value[])
     {
-        _Serial->print('A');
-        for (int index = 0; index < n_out; index++)
+        _Serial->print("A");
+        for (uint8_t index = 0; index < n_out; index++)
         {
             _temp.value = value[index];
-            _Serial->writeBytes(&temp.value[0], sizeof(T));
+            _Serial->writeBytes(&_temp.bytes[0], sizeof(T));
         }
         _Serial->println("");
     }

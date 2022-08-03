@@ -28,7 +28,7 @@
 #include "driver/newINA219.h"
 #include "driver/newMTQ.h"
 #include "utility/Attitude.h"
-
+#include "utility/newhil.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #define BAUDRATE 115200
@@ -58,10 +58,11 @@ enum
 uint8_t cur_addr[3] = {0x41 << 1, 0x45 << 1, 0x40 << 1};
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-NEWUART Serial3(USART3, 10, 115200);
+NEWUART Serial3(USART3, 10, 250000);
 NEWI2C I2C1BUS(I2C1, 100);
 NEWI2C I2C2BUS(I2C2, 100);
 NEWPWM PWMTIM1(TIM1);
+NEWHIL<float,1,1> HIL2SIM(&Serial3);
 newpcf8574 pcf8574(&I2C1BUS, pcf8574_addr);
 
 newINA219 curSenX(&I2C1BUS, cur_addr[x]);
@@ -126,7 +127,7 @@ int main(void)
   // MX_TIM1_Init();
   MX_SPI1_Init();
 
-  Serial3.begin(115200);
+  Serial3.begin(250000);
   I2C1BUS.begin();
   I2C2BUS.begin();
   MTQ[z].begin(MTQz_DIR_PIN, MTQz_ENA_PIN, TIM_CHANNEL_3, 255);
@@ -141,9 +142,19 @@ int main(void)
     Serial3.println("Error");
     HAL_Delay(100);
   }
+  float t[11],out[6] ={ 0.1f,0.2f,0.3f,0.4f,0.5f,0.6f};
   while (1)
   {
     
+    if(HIL2SIM.updateSensor(t)==1){
+      out[0] = t[0];
+      out[1] = t[1];
+      out[2] = t[2];
+      out[3] = t[3];
+      out[4] = t[4];
+      out[5] = t[5];
+      HIL2SIM.sendData(out);
+    }
   }
 
   /* USER CODE END 3 */

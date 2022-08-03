@@ -1,16 +1,4 @@
-09:59:04 **** Incremental Build of configuration Debug for project F479_Pinout ****
-make -j12 all 
-arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F479xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-../Core/Src/main.cpp: In function 'int main()':
-../Core/Src/main.cpp:149:39: error: lvalue required as unary '&' operand
-  149 |   i2cscanner(&I2C2BUS.getHandleTypeDef(), Serial3.getHandleTypeDef());
-      |               ~~~~~~~~~~~~~~~~~~~~~~~~^~
-../Core/Src/main.cpp:150:48: error: lvalue required as unary '&' operand
-  150 |   while (MPU6050_Init(&I2C2BUS.getHandleTypeDef()))
-      |                        ~~~~~~~~~~~~~~~~~~~~~~~~^~
-make: *** [Core/Src/subdir.mk:38: Core/Src/main.o] Error 1
-"make -j12 all" terminated with exit code 2. Build might be incomplete.
-09:59:14 **** Incremental Build of configuration Debug for project F479_Pinout ****
+17:56:58 **** Incremental Build of configuration Debug for project F479_Pinout ****
 make -j12 all 
 arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F479xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 arm-none-eabi-g++ -o "F479_Pinout.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld" -Wl,-Map="F479_Pinout.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
@@ -19,12 +7,26 @@ Finished building target: F479_Pinout.elf
 arm-none-eabi-size   F479_Pinout.elf 
 arm-none-eabi-objdump -h -S  F479_Pinout.elf  > "F479_Pinout.list"
    text	   data	    bss	    dec	    hex	filename
-  45744	    496	   2220	  48460	   bd4c	F479_Pinout.elf
+  44072	    496	   2220	  46788	   b6c4	F479_Pinout.elf
 Finished building: default.size.stdout
  
 Finished building: F479_Pinout.list
  
-10:14:30 **** Incremental Build of configuration Debug for project F479_Pinout ****
+17:57:03 **** Incremental Build of configuration Debug for project F479_Pinout ****
+make -j12 all 
+arm-none-eabi-size   F479_Pinout.elf 
+   text	   data	    bss	    dec	    hex	filename
+  44072	    496	   2220	  46788	   b6c4	F479_Pinout.elf
+Finished building: default.size.stdout
+ 
+17:57:22 **** Incremental Build of configuration Debug for project F479_Pinout ****
+make -j12 all 
+arm-none-eabi-size   F479_Pinout.elf 
+   text	   data	    bss	    dec	    hex	filename
+  44072	    496	   2220	  46788	   b6c4	F479_Pinout.elf
+Finished building: default.size.stdout
+ 
+18:09:59 **** Incremental Build of configuration Debug for project F479_Pinout ****
 make -j12 all 
 arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F479xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 arm-none-eabi-g++ -o "F479_Pinout.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld" -Wl,-Map="F479_Pinout.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
@@ -33,12 +35,12 @@ Finished building target: F479_Pinout.elf
 arm-none-eabi-size   F479_Pinout.elf 
 arm-none-eabi-objdump -h -S  F479_Pinout.elf  > "F479_Pinout.list"
    text	   data	    bss	    dec	    hex	filename
-  45744	    496	   2220	  48460	   bd4c	F479_Pinout.elf
+  44072	    496	   2220	  46788	   b6c4	F479_Pinout.elf
 Finished building: default.size.stdout
  
 Finished building: F479_Pinout.list
  
-10:21:37 **** Incremental Build of configuration Debug for project F479_Pinout ****
+18:11:39 **** Incremental Build of configuration Debug for project F479_Pinout ****
 make -j12 all 
 arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F479xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 arm-none-eabi-g++ -o "F479_Pinout.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld" -Wl,-Map="F479_Pinout.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
@@ -47,91 +49,7 @@ Finished building target: F479_Pinout.elf
 arm-none-eabi-size   F479_Pinout.elf 
 arm-none-eabi-objdump -h -S  F479_Pinout.elf  > "F479_Pinout.list"
    text	   data	    bss	    dec	    hex	filename
-  49360	    640	   2312	  52312	   cc58	F479_Pinout.elf
-Finished building: default.size.stdout
- 
-Finished building: F479_Pinout.list
- 
-10:23:21 **** Incremental Build of configuration Debug for project F479_Pinout ****
-make -j12 all 
-arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F479xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-g++ -o "F479_Pinout.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld" -Wl,-Map="F479_Pinout.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
-Finished building target: F479_Pinout.elf
- 
-arm-none-eabi-size   F479_Pinout.elf 
-arm-none-eabi-objdump -h -S  F479_Pinout.elf  > "F479_Pinout.list"
-   text	   data	    bss	    dec	    hex	filename
-  49368	    640	   2312	  52320	   cc60	F479_Pinout.elf
-Finished building: default.size.stdout
- 
-Finished building: F479_Pinout.list
- 
-11:16:16 **** Incremental Build of configuration Debug for project F479_Pinout ****
-make -j12 all 
-arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F479xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-g++ -o "F479_Pinout.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld" -Wl,-Map="F479_Pinout.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
-Finished building target: F479_Pinout.elf
- 
-arm-none-eabi-size   F479_Pinout.elf 
-arm-none-eabi-objdump -h -S  F479_Pinout.elf  > "F479_Pinout.list"
-   text	   data	    bss	    dec	    hex	filename
-  49592	    640	   2312	  52544	   cd40	F479_Pinout.elf
-Finished building: default.size.stdout
- 
-Finished building: F479_Pinout.list
- 
-11:16:50 **** Incremental Build of configuration Debug for project F479_Pinout ****
-make -j12 all 
-arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F479xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-g++ -o "F479_Pinout.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld" -Wl,-Map="F479_Pinout.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
-Finished building target: F479_Pinout.elf
- 
-arm-none-eabi-size   F479_Pinout.elf 
-arm-none-eabi-objdump -h -S  F479_Pinout.elf  > "F479_Pinout.list"
-   text	   data	    bss	    dec	    hex	filename
-  49592	    640	   2312	  52544	   cd40	F479_Pinout.elf
-Finished building: default.size.stdout
- 
-Finished building: F479_Pinout.list
- 
-11:21:02 **** Incremental Build of configuration Debug for project F479_Pinout ****
-make -j12 all 
-arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F479xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-g++ -o "F479_Pinout.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld" -Wl,-Map="F479_Pinout.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
-Finished building target: F479_Pinout.elf
- 
-arm-none-eabi-size   F479_Pinout.elf 
-arm-none-eabi-objdump -h -S  F479_Pinout.elf  > "F479_Pinout.list"
-   text	   data	    bss	    dec	    hex	filename
-  45896	    496	   2220	  48612	   bde4	F479_Pinout.elf
-Finished building: default.size.stdout
- 
-Finished building: F479_Pinout.list
- 
-12:18:43 **** Incremental Build of configuration Debug for project F479_Pinout ****
-make -j12 all 
-arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F479xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-g++ -o "F479_Pinout.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld" -Wl,-Map="F479_Pinout.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
-Finished building target: F479_Pinout.elf
- 
-arm-none-eabi-size   F479_Pinout.elf 
-arm-none-eabi-objdump -h -S  F479_Pinout.elf  > "F479_Pinout.list"
-   text	   data	    bss	    dec	    hex	filename
-  46104	    496	   2220	  48820	   beb4	F479_Pinout.elf
-Finished building: default.size.stdout
- 
-Finished building: F479_Pinout.list
- 
-12:19:33 **** Incremental Build of configuration Debug for project F479_Pinout ****
-make -j12 all 
-arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F479xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-g++ -o "F479_Pinout.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\INSTED\Desktop\INSTED_WORKSPACE\FF64-MTQ\F479_Pinout\STM32F479VITX_FLASH.ld" -Wl,-Map="F479_Pinout.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
-Finished building target: F479_Pinout.elf
- 
-arm-none-eabi-size   F479_Pinout.elf 
-arm-none-eabi-objdump -h -S  F479_Pinout.elf  > "F479_Pinout.list"
-   text	   data	    bss	    dec	    hex	filename
-  45888	    496	   2220	  48604	   bddc	F479_Pinout.elf
+  44024	    496	   2220	  46740	   b694	F479_Pinout.elf
 Finished building: default.size.stdout
  
 Finished building: F479_Pinout.list
