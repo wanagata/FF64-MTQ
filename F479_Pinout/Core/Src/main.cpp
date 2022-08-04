@@ -58,11 +58,13 @@ enum
 uint8_t cur_addr[3] = {0x41 << 1, 0x45 << 1, 0x40 << 1};
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-NEWUART Serial3(USART3, 10, 250000);
+NEWUART Serial3(USART3, 100, 250000);
 NEWI2C I2C1BUS(I2C1, 100);
 NEWI2C I2C2BUS(I2C2, 100);
 NEWPWM PWMTIM1(TIM1);
-NEWHIL<float,1,1> HIL2SIM(&Serial3);
+// Receive 14 parameters: [qref0 qref1 qref2 qref3 q0 q1 q2 q3 w1 w2 w3 Mb1 Mb2 Mb3]
+// Send 12 parameters: [PWMx PWMy PWMz r_err p_err y_err rpm1 rpm2 rpm3 A1 A2 A3]
+NEWHIL<float, 14, 12> HIL2SIM(&Serial3);
 newpcf8574 pcf8574(&I2C1BUS, pcf8574_addr);
 
 newINA219 curSenX(&I2C1BUS, cur_addr[x]);
@@ -115,6 +117,7 @@ void printCur(NEWUART *Serial, NEWMTQ *MTQ, float *sumw);
  * @brief  The application entry point.
  * @retval int
  */
+uint32_t sT = 0, time_step = 100;
 
 int main(void)
 {
@@ -133,8 +136,8 @@ int main(void)
   MTQ[z].begin(MTQz_DIR_PIN, MTQz_ENA_PIN, TIM_CHANNEL_3, 255);
   MTQ[y].begin(MTQy_DIR_PIN, MTQy_ENA_PIN, TIM_CHANNEL_2, 255);
   MTQ[x].begin(MTQx_DIR_PIN, MTQx_ENA_PIN, TIM_CHANNEL_1, 255);
-  
-  Serial3.println("EnablePower");
+
+  /*Serial3.println("EnablePower");
 
   i2cscanner(I2C2BUS.getHandleTypeDef(), Serial3.getHandleTypeDef());
   while (MPU6050_Init(I2C2BUS.getHandleTypeDef()))
@@ -142,17 +145,24 @@ int main(void)
     Serial3.println("Error");
     HAL_Delay(100);
   }
-  float t[11],out[6] ={ 0.1f,0.2f,0.3f,0.4f,0.5f,0.6f};
+  */
+  float t[14], out[12] = {0}, a = 0.0060320f;
+  Vector<3> kb(25000, 25000, 25000);
   while (1)
   {
-    
-    if(HIL2SIM.updateSensor(t)==1){
-      out[0] = t[0];
-      out[1] = t[1];
-      out[2] = t[2];
-      out[3] = t[3];
-      out[4] = t[4];
-      out[5] = t[5];
+
+    if (HIL2SIM.updateSensor(t) == 1)
+    {
+
+      Vector<3> gyro(t[8], t[9], t[10]);
+      Vector<3> mag(t[11], t[12], t[13]);
+      Vector<3> Bdot = gyro.cross(mag);
+      //Vector<3> desire_cur = kb * Bdot / a;
+
+      out[9] = -kb[0]*Bdot[0]/a;
+      out[10] = -kb[1]*Bdot[1]/a;
+      out[11] = -kb[2]*Bdot[2]/a;
+
       HIL2SIM.sendData(out);
     }
   }

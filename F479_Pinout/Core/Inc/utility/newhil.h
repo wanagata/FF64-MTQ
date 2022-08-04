@@ -1,6 +1,6 @@
 #ifndef _NEWHIL_H_
 #define _NEWHIL_H_
-//using namespace std;
+// using namespace std;
 #include "multconvert.h"
 #include "stm32newfnc/newuart.h"
 // T for datatype, n_in for n inputs, n_out for n outputs
@@ -29,15 +29,24 @@ public:
 
     uint8_t updateSensor(T buffer_out[])
     {
-        uint8_t _ff = 0;
-        if (_Serial->readByte(&_ff) != 0)
+        uint8_t len = n_in * sizeof(T) + 1;
+        uint8_t _buf[len] = {0};
+        
+        if (_Serial->readBytes(_buf, len) != 0)
             return 0; // error
-        if (_ff != 'S')
+        if (_buf[0] != 'S')
             return 0; // error
 
-        for (int i = 0; i < n_in; i++)
+        for (uint8_t index = 0; index < n_in; index++)
         {
-            buffer_out[i] = getData();
+            for (uint16_t i = 0; i < sizeof(T); i++)
+            {
+                //1 for 'A', i for byte's index, sizeof(T) for size type
+                //store data in buffer union
+                _temp.bytes[i] = _buf[i + sizeof(T) * index + 1];
+            }
+            //convert from byte array to the T data type
+            buffer_out[index] = _temp.value;
         }
         return 1;
     }
@@ -54,13 +63,21 @@ public:
 
     void sendData(T value[])
     {
-        _Serial->print("A");
+        uint8_t len = n_out * sizeof(T) + 2;
+        uint8_t _buf[len] = {0};
+        _buf[0] = 'A';
+        _buf[len - 1] = '\n';
+
         for (uint8_t index = 0; index < n_out; index++)
         {
             _temp.value = value[index];
-            _Serial->writeBytes(&_temp.bytes[0], sizeof(T));
+            for (uint16_t i = 0; i < sizeof(T); i++)
+            {
+                _buf[i + sizeof(T) * index + 1] = _temp.bytes[i];
+            }
         }
-        _Serial->println("");
+        //_Serial->println("");
+        _Serial->writeBytes(_buf, len);
     }
 };
 

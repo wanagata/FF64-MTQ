@@ -1,0 +1,9 @@
+../Core/Inc/utility/FastPID.cpp:5:1:FastPID::~FastPID()	16	static
+../Core/Inc/utility/FastPID.cpp:8:6:void FastPID::clear()	16	static
+../Core/Inc/utility/FastPID.cpp:16:6:bool FastPID::setCoefficients(float, float, float, float)	32	static
+../Core/Inc/utility/FastPID.cpp:23:6:bool FastPID::setOutputConfig(int, bool)	64	static
+../Core/Inc/utility/FastPID.cpp:45:6:bool FastPID::setOutputRange(int16_t, int16_t)	32	static
+../Core/Inc/utility/FastPID.cpp:56:6:bool FastPID::configure(float, float, float, float, int, bool)	40	static
+../Core/Inc/utility/FastPID.cpp:63:10:uint32_t FastPID::floatToParam(float)	24	static
+../Core/Inc/utility/FastPID.cpp:79:9:int16_t FastPID::step(int16_t, int16_t)	128	static
+../Core/Inc/utility/FastPID.cpp:141:6:void FastPID::setCfgErr()	16	static

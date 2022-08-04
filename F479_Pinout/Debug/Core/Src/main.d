@@ -35,10 +35,11 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../Core/Inc/driver/newpcf8574.h ../Core/Inc/driver/mpu6050.h \
  ../Core/Inc/driver/newINA219.h ../Core/Inc/utility/multconvert.h \
  ../Core/Inc/driver/newMTQ.h ../Core/Inc/driver/newINA219.h \
- ../Core/Inc/driver/newpcf8574.h ../Core/Inc/utility/Attitude.h \
- ../Core/Inc/utility/imumaths.h ../Core/Inc/utility/matrix.h \
- ../Core/Inc/utility/vector.h ../Core/Inc/utility/quaternion.h \
- ../Core/Inc/utility/newhil.h ../Core/Inc/utility/multconvert.h
+ ../Core/Inc/driver/newpcf8574.h ../Core/Inc/utility/FastPID.h \
+ ../Core/Inc/utility/Attitude.h ../Core/Inc/utility/imumaths.h \
+ ../Core/Inc/utility/matrix.h ../Core/Inc/utility/vector.h \
+ ../Core/Inc/utility/quaternion.h ../Core/Inc/utility/newhil.h \
+ ../Core/Inc/utility/multconvert.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -82,6 +83,7 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
 ../Core/Inc/driver/newMTQ.h:
 ../Core/Inc/driver/newINA219.h:
 ../Core/Inc/driver/newpcf8574.h:
+../Core/Inc/utility/FastPID.h:
 ../Core/Inc/utility/Attitude.h:
 ../Core/Inc/utility/imumaths.h:
 ../Core/Inc/utility/matrix.h:
