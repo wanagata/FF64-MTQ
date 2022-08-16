@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stdio.h"
+#include <stdlib.h>
 #include "stm32newfnc/i2cscan.h"
 #include "stm32newfnc/newuart.h"
 #include "stm32newfnc/newi2c.h"
@@ -46,6 +47,8 @@ MPU6050_t MPU6050;
 #define MTQy_DIR_PIN 5
 #define MTQz_DIR_PIN 7
 #define pcf8574_addr (0x27 << 1)
+
+#define samp_ms 100
 // xyz
 enum
 {
@@ -60,6 +63,7 @@ NEWUART Serial3(USART3, 10, 115200);
 NEWI2C I2C1BUS(I2C1, 100);
 NEWI2C I2C2BUS(I2C2, 100);
 NEWPWM PWMTIM1(TIM1);
+
 newpcf8574 pcf8574(&I2C1BUS, pcf8574_addr);
 
 newINA219 curSenX(&I2C1BUS, cur_addr[x]);
@@ -139,9 +143,55 @@ int main(void)
     Serial3.println("Error");
     HAL_Delay(100);
   }
+  uint16_t prev_ms = HAL_GetTick();
   while (1)
   {
-    Serial3.println("t,PWM,mA");
+    char temp[20];
+    if (Serial3.readBytes((uint8_t *)temp, 5) == HAL_OK)
+    {
+      if (temp[0] == '#')
+      {
+        // temp[4] ='\0';
+        int ac = atoi(&temp[1]);
+        if (ac < 256 && ac > -256)
+        {
+          switch (temp[4])
+          {
+          case 'x':
+          case 'X':
+            MTQ[x].run_pwm(ac);
+            break;
+          case 'y':
+          case 'Y':
+            MTQ[y].run_pwm(ac);
+            break;
+          case 'z':
+          case 'Z':
+            MTQ[z].run_pwm(ac);
+            break;
+          }
+          Serial3.printI(ac);
+          Serial3.println(&temp[4]);
+        }
+        // HAL_UART_Transmit(Serial3.getHandleTypeDef(), temp, 5, 10);
+      }
+    }
+    uint16_t elap_ms = HAL_GetTick() - prev_ms;
+    if (elap_ms > samp_ms)
+    {
+      prev_ms = HAL_GetTick();
+      Serial3.println("xPWM,xmA,yPWM,ymA,zPWM,zmA");
+      for (int i = 0; i < 3; ++i)
+      {
+        Serial3.printI(MTQ[i].get_pwm_cmd());
+        Serial3.print(",");
+        Serial3.printF(MTQ[i].read_mA());
+        Serial3.print(",");
+      }
+      Serial3.println("");
+    }
+    /*
+
     for (int pwm = 0; pwm < 255; pwm = (pwm + 254) % 255)
     {
       int i = 0;
@@ -149,7 +199,7 @@ int main(void)
       {
         float allload = 0.0f;
         MTQ[z].run_pwm(pwm);
-        // Serial3.print("X");
+        //
         // printCur(&Serial3, &MTQ[x], &allload);
         // Serial3.print("Y");
         // printCur(&Serial3, &MTQ[y], &allload);
@@ -169,11 +219,12 @@ int main(void)
         HAL_Delay(100);
         i++;
       }
-    }
+      */
   }
-
-  /* USER CODE END 3 */
 }
+
+/* USER CODE END 3 */
+
 void printCur(NEWUART *Serial, NEWMTQ *MTQ, float *sumw)
 {
   float mA = MTQ->read_mA();

@@ -46,15 +46,18 @@ public:
 
     }
 
+    int16_t get_pwm_cmd() { return _cur_pwm; }
+
     void run_pwm(int16_t cur_pwm)
     {
         static int ab_cur_pwm  = 0;
         static int dir_state = 0;
         _timer->run_ch_pwm(_tim_ch, 0);
         _ioxpander->setPIN(_ena_pin,0);
+         _cur_pwm = cur_pwm;
         if (cur_pwm != 0)
         {
-            _cur_pwm = cur_pwm;
+           
             // set direction from pwm signed
             dir_state = (_cur_pwm > 0) ? 0 : 1;
             ab_cur_pwm = (!dir_state) ? _cur_pwm : -_cur_pwm;
