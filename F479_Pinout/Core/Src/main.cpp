@@ -131,7 +131,7 @@ int main(void)
   MTQ[y].begin(MTQy_DIR_PIN, MTQy_ENA_PIN, TIM_CHANNEL_2, 255);
   MTQ[x].begin(MTQx_DIR_PIN, MTQx_ENA_PIN, TIM_CHANNEL_1, 255);
 
-  Serial3.println("EnablePower");
+  /*Serial3.println("EnablePower");
 
   i2cscanner(I2C2BUS.getHandleTypeDef(), Serial3.getHandleTypeDef());
   while (MPU6050_Init(I2C2BUS.getHandleTypeDef()))
@@ -139,40 +139,31 @@ int main(void)
     Serial3.println("Error");
     HAL_Delay(100);
   }
+  */
+
   while (1)
   {
-    Serial3.println("t,PWM,mA");
-    for (int pwm = 0; pwm < 255; pwm = (pwm + 254) % 255)
+
+    if (HIL2SIM.updateSensor(t) == 1)
     {
-      int i = 0;
-      while (i < 50) // 100ms*50 = 5 sec
-      {
-        float allload = 0.0f;
-        MTQ[z].run_pwm(pwm);
-        // Serial3.print("X");
-        // printCur(&Serial3, &MTQ[x], &allload);
-        // Serial3.print("Y");
-        // printCur(&Serial3, &MTQ[y], &allload);
-        Serial3.printI(i);
-        Serial3.print(",");
-        Serial3.printI(pwm);
-        Serial3.print(",");
-        Serial3.printF(MTQ[z].read_mA());
-        Serial3.println("");
-        //printCur(&Serial3, &MTQ[z], &allload);
-        // Serial3.print("Sum :");
-        // Serial3.printF(allload);
-        // Serial3.println("******************************************");
-        // MPU6050_Read_All(I2C2BUS.getHandleTypeDef(), &MPU6050);
-        // Serial3.printF(MPU6050.KalmanAngleX);
-        // Serial3.println("");
-        HAL_Delay(100);
-        i++;
-      }
+      float allload = 0.0f;
+      MTQ[z].run_pwm(100);
+      Serial3.print("X");
+      printCur(&Serial3, &MTQ[x], &allload);
+      Serial3.print("Y");
+      printCur(&Serial3, &MTQ[y], &allload);
+      Serial3.print("Z");
+      printCur(&Serial3, &MTQ[z], &allload);
+      Serial3.print("Sum :");
+      Serial3.printF(allload);
+      Serial3.println("******************************************");
+      //MPU6050_Read_All(I2C2BUS.getHandleTypeDef(), &MPU6050);
+      //Serial3.printF(MPU6050.KalmanAngleX);
+      //Serial3.println("");
+      HAL_Delay(100);
+      i++;
     }
   }
-
-  /* USER CODE END 3 */
 }
 void printCur(NEWUART *Serial, NEWMTQ *MTQ, float *sumw)
 {
