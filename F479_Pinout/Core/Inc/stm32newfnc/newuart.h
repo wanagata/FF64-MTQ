@@ -1,6 +1,9 @@
+#ifndef _NEWUART_H_
+#define _NEWUART_H_
 #include "stm32f4xx_hal.h"
 #include "stdio.h"
 #include "string.h"
+
 /*
  uint8_t buffer;
             uint8_t error;
@@ -53,6 +56,10 @@ public:
     {
         return HAL_UART_Receive(&_uart, buffer, 1, _Timeout);
     }
+    uint8_t readBytes(uint8_t *buffer,uint8_t len)
+    {
+        return HAL_UART_Receive(&_uart, buffer, len, _Timeout);
+    }
 
     void writeBytes(uint8_t data[], uint8_t len)
     {
@@ -88,3 +95,4 @@ public:
         print("\r\n");
     }
 };
+#endif
